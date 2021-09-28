@@ -1,0 +1,8 @@
+*{
+    box-sizing: border-box;
+}
+
+.navbar{
+    color: white;
+    background-image: linear-gradient(to bottom right, red, yellow);
+}
