@@ -14,7 +14,7 @@ WEBPAGE URL
 
 
 GitHub CODE URL
-
+https://github.com/Wickette/HappeningWeather.git
 
 APP IMAGES
 ![image](https://user-images.githubusercontent.com/87992263/135186332-57cc94a9-fbd9-432a-a373-297a397de0d9.png)
