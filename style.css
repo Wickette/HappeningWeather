@@ -1,8 +1,41 @@
-*{
-    box-sizing: border-box;
+* {
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+body{
+    background-color: lightsteelblue;
+}
+.navbar {
+  background-image: linear-gradient(to bottom right, red, yellow);
+  border-bottom: black solid 2px;
+}
+h5 {
+  font-weight: bolder;
+  text-align: center;
+  background-image: linear-gradient(to bottom right, red, yellow);
+  width: 100%;
+}
+.neutral-color{
+    background-color: lightgray;
+}
+.green-color{
+    background-color: lightgreen;
+}
+.yellow-color{
+    background-color: yellow;
+}
+.orange-color{
+    background-color: orange;
+}
+.red-color{
+    background-color: maroon;
+}
+.purple-color{
+    background-color: purple;
+}
+span{
+    border: black solid 1px;
+    padding: 5px;
+    border-radius: 10px;
 }
 
-.navbar{
-    color: white;
-    background-image: linear-gradient(to bottom right, red, yellow);
-}
