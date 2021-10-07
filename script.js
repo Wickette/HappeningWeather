@@ -5,22 +5,20 @@ let currentDayTemperature = document.querySelector(".temperature");
 let currentDayWind = document.querySelector(".wind");
 let currentDayHumidity = document.querySelector(".humidity");
 let currentDayUV = document.querySelector(".uv");
-let searchHistory = [];
+let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
 let currentDayIcon = document.querySelector(".currentWeather");
 let breakLine = document.querySelector(".break");
 let userHistory = document.querySelector(".city-history");
-
-
-
-console.log(searchHistory);
-
+let clearBtn = document.querySelector(".clear-btn");
 let APIKey = "18ea5b0d2b1aa0a96ef25a7aa406676f";
 let city = document.querySelector(".city-input");
 let searchBtn = document.querySelector(".search-btn");
+let historyItemBtn = document.querySelector(".form-control");
+
 //q= is the query parameter, where we can add any user input
 
-let getCity = function () {
-  let queryURL ="https://api.openweathermap.org/data/2.5/weather?q=" + city.value.trim() + "&appid=" + APIKey;
+let getCity = function (cityName) {
+  let queryURL ="https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
   fetch(queryURL)
     .then(function (response) {
       if (response.ok) {
@@ -87,9 +85,9 @@ let getCity = function () {
     });
 };
 
-let GetWeeklyForecast = function () {
+let GetWeeklyForecast = function (cityName) {
   let weeklyURL =
-    "https://api.openweathermap.org/data/2.5/forecast?q=" + city.value.trim() + "&appid=" + APIKey;
+    "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + APIKey;
   fetch(weeklyURL)
     .then(function (response) {
       if (response.ok) {
@@ -116,35 +114,54 @@ let GetWeeklyForecast = function () {
         cardImg.setAttribute("alt", data.list[forecastIndex].weather[0].description);
         forecastCardEl[i].append(cardImg);
         let cardTemp = document.createElement("p");
-        //cardTemp.setAttribute()
         cardTemp.innerHTML ="Temp: " + kelvinToCelsius(data.list[forecastIndex].main.temp) + " " + "&#8451";
         forecastCardEl[i].append(cardTemp);
         let cardFeel = document.createElement("p");
-        cardFeel.innerHTML ="Feels like: " + kelvinToCelsius(data.list[forecastIndex].main.feels_like) + " " + "&#8451";
+        cardFeel.innerHTML ="Humidity: " + data.list[forecastIndex].main.humidity + "%";
         forecastCardEl[i].append(cardFeel);
+        let cardWind = document.createElement("p");
+        cardWind.innerHTML ="Wind: " + data.list[forecastIndex].wind.speed + " " + "MPH";
+        forecastCardEl[i].append(cardWind);
       }
     });
 };
-
 
 //function to return kelvin to celcius
 function kelvinToCelsius(k) {
   return Math.floor(k - 273.15);
 }
 
-searchBtn.addEventListener("click", GetWeeklyForecast);
-searchBtn.addEventListener("click", getCity);
+function renderSearchHistory(){
+  userHistory.innerHTML = "";
+  for (let i=0; i<searchHistory.length; i++){
+    let historyItem = document.createElement("input");
+    console.log(historyItem)
+    historyItem.setAttribute("type", "text");
+    historyItem.setAttribute("readonly", true);
+    historyItem.setAttribute("class", "form-control d-block bg-white");
+    historyItem.setAttribute("value", searchHistory[i]);
+    historyItem.addEventListener("click", function(){
+      console.log(historyItem.value)
+      let cityName = historyItem.value;
+      getCity(cityName);
+      GetWeeklyForecast(cityName);
+    })
+    userHistory.append(historyItem);
+  }
+}
 
 searchBtn.addEventListener("click",function() {
-  let userSearch = city.value.trim();
-  searchHistory.push(userSearch);
+  let cityName = city.value.trim();
+  getCity(cityName);
+  GetWeeklyForecast(cityName);
+  searchHistory.push(cityName);
   localStorage.setItem("search",JSON.stringify(searchHistory));
-
-  history.innerHTML = JSON.parse(localStorage.getItem("searchHistory")) 
+  renderSearchHistory();
 })
 
-
-
-
+clearBtn.addEventListener("click", function(){
+  searchHistory = [];
+  localStorage.clear();
+})
 
 
